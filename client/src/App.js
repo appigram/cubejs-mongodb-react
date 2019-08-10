@@ -11,11 +11,15 @@ const cubejsApi = cubejs(
   { apiUrl: process.env.REACT_APP_API_URL }
 )
 const numberFormatter = item => numeral(item).format('0,0')
-const dateFormatter = item => moment(item).format('MMM YY')
+// const dateFormatter = item => moment(item).format('MMM YY')
 
-const renderSingleValue = (resultSet, key) => (
-  <h1 height={300}>{numberFormatter(resultSet.chartPivot()[0][key])}</h1>
-)
+const renderSingleValue = (resultSet, key) => {
+  // console.log('resultSet: ', resultSet)
+  // console.log('key: ', key)
+  return (
+    <h1 height={300}>{numberFormatter(resultSet.chartPivot()[0][key])}</h1>
+  )
+}
 
 const chartJsData = (resultSet) => {
   return {
@@ -45,7 +49,7 @@ class App extends Component {
               query={{
                 measures: ['Tweets.count']
               }}
-              render={resultSet => renderSingleValue(resultSet, 'total-tweets')}
+              render={resultSet => renderSingleValue(resultSet, 'Tweets.count')}
             />
           </Col>
           <Col sm='4'>
@@ -55,7 +59,7 @@ class App extends Component {
               query={{
                 measures: ['Tweets.retweetCount']
               }}
-              render={resultSet => renderSingleValue(resultSet, 'total-retweets')}
+              render={resultSet => renderSingleValue(resultSet, 'Tweets.retweetCount')}
             />
           </Col>
           <Col sm='4'>
@@ -65,7 +69,7 @@ class App extends Component {
               query={{
                 measures: ['Tweets.favoriteCount']
               }}
-              render={resultSet => renderSingleValue(resultSet, 'total-favorites')}
+              render={resultSet => renderSingleValue(resultSet, 'Tweets.favoriteCount')}
             />
           </Col>
         </Row>
