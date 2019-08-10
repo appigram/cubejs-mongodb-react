@@ -1,16 +1,6 @@
 import React, { Component } from 'react'
 import { Container, Row, Col } from 'reactstrap'
-import {
-  AreaChart,
-  Area,
-  XAxis,
-  YAxis,
-  Tooltip,
-  ResponsiveContainer,
-  Legend,
-  BarChart,
-  Bar
-} from 'recharts'
+import { Pie, Bar } from 'react-chartjs-2'
 import moment from 'moment'
 import numeral from 'numeral'
 import cubejs from '@cubejs-client/core'
@@ -27,7 +17,7 @@ const renderSingleValue = (resultSet, key) => (
   <h1 height={300}>{numberFormatter(resultSet.chartPivot()[0][key])}</h1>
 )
 
-/* const chartJsData = (resultSet) => {
+const chartJsData = (resultSet) => {
   return {
     datasets: [{
       data: resultSet.series()[0].series.map((r) => { return r.value }),
@@ -41,7 +31,7 @@ const renderSingleValue = (resultSet, key) => (
     }],
     labels: resultSet.categories().map((c) => { return c.category })
   }
-} */
+}
 
 class App extends Component {
   render () {
@@ -99,20 +89,7 @@ class App extends Component {
                 limit: 5
               }}
               render={resultSet => (
-                <ResponsiveContainer width='100%' height={300}>
-                  <AreaChart data={resultSet.chartPivot()}>
-                    <XAxis dataKey='category' tickFormatter={dateFormatter} />
-                    <YAxis tickFormatter={numberFormatter} />
-                    <Tooltip labelFormatter={dateFormatter} />
-                    <Area
-                      type='monotone'
-                      dataKey='Users.count'
-                      name='Users'
-                      stroke='rgb(106, 110, 229)'
-                      fill='rgba(106, 110, 229, .16)'
-                    />
-                  </AreaChart>
-                </ResponsiveContainer>
+                <Pie data={chartJsData(resultSet)} />
               )}
             />
           </Col>
@@ -127,32 +104,7 @@ class App extends Component {
               }}
               render={resultSet => {
                 return (
-                  <ResponsiveContainer width='100%' height={300}>
-                    <BarChart data={resultSet.chartPivot()}>
-                      <XAxis tickFormatter={dateFormatter} dataKey='x' />
-                      <YAxis tickFormatter={numberFormatter} />
-                      <Bar
-                        stackId='a'
-                        dataKey='shipped, Orders.count'
-                        name='Shipped'
-                        fill='#7DB3FF'
-                      />
-                      <Bar
-                        stackId='a'
-                        dataKey='processing, Orders.count'
-                        name='Processing'
-                        fill='#49457B'
-                      />
-                      <Bar
-                        stackId='a'
-                        dataKey='completed, Orders.count'
-                        name='Completed'
-                        fill='#FF7C78'
-                      />
-                      <Legend />
-                      <Tooltip />
-                    </BarChart>
-                  </ResponsiveContainer>
+                  <Bar data={chartJsData(resultSet)} options={{ legend: { display: false } }} />
                 )
               }}
             />
