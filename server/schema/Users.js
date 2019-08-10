@@ -1,5 +1,5 @@
-cube(`Users`, {
-  sql: `SELECT * FROM public.users`,
+/* cube(`Users`, {
+  sql: `SELECT * FROM users`,
 
   joins: {
 
@@ -40,3 +40,4 @@ cube(`Users`, {
     }
   }
 })
+*/

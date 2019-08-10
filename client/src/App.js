@@ -16,15 +16,32 @@ import numeral from 'numeral'
 import cubejs from '@cubejs-client/core'
 import Chart from './Chart.js'
 
-const cubejsApi = cubejs(process.env.REACT_APP_CUBEJS_TOKEN, {
-  apiUrl: process.env.REACT_APP_API_URL
-})
+const cubejsApi = cubejs(
+  process.env.REACT_APP_CUBEJS_TOKEN,
+  { apiUrl: process.env.REACT_APP_API_URL }
+)
 const numberFormatter = item => numeral(item).format('0,0')
 const dateFormatter = item => moment(item).format('MMM YY')
 
 const renderSingleValue = (resultSet, key) => (
   <h1 height={300}>{numberFormatter(resultSet.chartPivot()[0][key])}</h1>
 )
+
+/* const chartJsData = (resultSet) => {
+  return {
+    datasets: [{
+      data: resultSet.series()[0].series.map((r) => { return r.value }),
+      backgroundColor: [
+        'rgb(255, 99, 132)',
+        'rgb(255, 159, 64)',
+        'rgb(255, 205, 86)',
+        'rgb(75, 192, 192)',
+        'rgb(54, 162, 235)'
+      ]
+    }],
+    labels: resultSet.categories().map((c) => { return c.category })
+  }
+} */
 
 class App extends Component {
   render () {
@@ -34,34 +51,31 @@ class App extends Component {
           <Col sm='4'>
             <Chart
               cubejsApi={cubejsApi}
-              title='Total Users'
-              query={{ measures: ['Users.count'] }}
-              render={resultSet => renderSingleValue(resultSet, 'Users.count')}
-            />
-          </Col>
-          <Col sm='4'>
-            <Chart
-              cubejsApi={cubejsApi}
-              title='Total Orders'
-              query={{ measures: ['Orders.count'] }}
-              render={resultSet => renderSingleValue(resultSet, 'Orders.count')}
-            />
-          </Col>
-          <Col sm='4'>
-            <Chart
-              cubejsApi={cubejsApi}
-              title='Shipped Orders'
+              title='Total Tweets'
               query={{
-                measures: ['Orders.count'],
-                filters: [
-                  {
-                    dimension: 'Orders.status',
-                    operator: 'equals',
-                    values: ['shipped']
-                  }
-                ]
+                measures: ['Tweets.count']
               }}
-              render={resultSet => renderSingleValue(resultSet, 'Orders.count')}
+              render={resultSet => renderSingleValue(resultSet, 'total-tweets')}
+            />
+          </Col>
+          <Col sm='4'>
+            <Chart
+              cubejsApi={cubejsApi}
+              title='Total Retweets'
+              query={{
+                measures: ['Tweets.retweetCount']
+              }}
+              render={resultSet => renderSingleValue(resultSet, 'total-retweets')}
+            />
+          </Col>
+          <Col sm='4'>
+            <Chart
+              cubejsApi={cubejsApi}
+              title='Total Favorites'
+              query={{
+                measures: ['Tweets.favoriteCount']
+              }}
+              render={resultSet => renderSingleValue(resultSet, 'total-favorites')}
             />
           </Col>
         </Row>
@@ -71,16 +85,18 @@ class App extends Component {
           <Col sm='6'>
             <Chart
               cubejsApi={cubejsApi}
-              title='New Users Over Time'
+              title='Top Tweets Locations'
               query={{
-                measures: ['Users.count'],
-                timeDimensions: [
+                measures: ['Tweets.count'],
+                dimensions: ['Tweets.location'],
+                filters: [
                   {
-                    dimension: 'Users.createdAt',
-                    dateRange: ['2017-01-01', '2018-12-31'],
-                    granularity: 'month'
+                    dimension: 'Tweets.location',
+                    operator: 'notEquals',
+                    values: ['']
                   }
-                ]
+                ],
+                limit: 5
               }}
               render={resultSet => (
                 <ResponsiveContainer width='100%' height={300}>
@@ -103,17 +119,11 @@ class App extends Component {
           <Col sm='6'>
             <Chart
               cubejsApi={cubejsApi}
-              title='Orders by Status Over Time'
+              title='Most Popular Languages'
               query={{
-                measures: ['Orders.count'],
-                dimensions: ['Orders.status'],
-                timeDimensions: [
-                  {
-                    dimension: 'Orders.createdAt',
-                    dateRange: ['2017-01-01', '2018-12-31'],
-                    granularity: 'month'
-                  }
-                ]
+                measures: ['Tweets.count'],
+                dimensions: ['Tweets.lang'],
+                limit: 5
               }}
               render={resultSet => {
                 return (

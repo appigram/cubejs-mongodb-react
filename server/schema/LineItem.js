@@ -1,5 +1,5 @@
-cube(`LineItems`, {
-  sql: `SELECT * FROM public.line_items`,
+/* cube(`LineItems`, {
+  sql: `SELECT * FROM line_items`,
 
   joins: {
     Orders: {
@@ -38,3 +38,4 @@ cube(`LineItems`, {
     }
   }
 })
+*/
