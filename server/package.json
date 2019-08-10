@@ -1,0 +1,13 @@
+{
+  "name": "cubejs-mongodb-example",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "./node_modules/.bin/cubejs-dev-server"
+  },
+  "dependencies": {
+    "@cubejs-backend/mongobi-driver": "^0.10.16",
+    "@cubejs-backend/server": "^0.10.21",
+    "dotenv": "^8.0.0"
+  }
+}
