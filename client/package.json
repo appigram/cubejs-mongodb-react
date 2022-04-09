@@ -17,7 +17,7 @@
     "@cubejs-client/react": "^0.10.16",
     "bootstrap": "^4.3.1",
     "chart.js": "^2.8.0",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "numeral": "^2.0.6",
     "react": "^16.8.5",
     "react-chartjs-2": "^2.7.6",
